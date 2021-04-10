@@ -1,21 +1,34 @@
 package com.group2.attendancestudentapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.group2.attendancestudentapp.adapter.AttendanceAdapter;
+import com.group2.attendancestudentapp.model.AttendanceDetails;
+import com.group2.attendancestudentapp.model.HourDetails;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     AutoCompleteTextView editTextFilledExposedDropdown;
+    ScrollView viewByDateLayout;
+    RecyclerView attendanceRecycler;
+    AttendanceAdapter attendanceAdapter;
+    List<AttendanceDetails> attendanceDetailsList;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +65,69 @@ public class HomeActivity extends AppCompatActivity {
         editTextFilledExposedDropdown = findViewById(R.id.attendanceViewText);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
+        // findViewById(R.id.applyBtn).setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), AttendanceTableViewActivity.class)));
+
+        findViewById(R.id.applyBtn).setOnClickListener(view -> ShowAttendanceByDate());
+
         // TODO Badge code for icon
         /*BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.home);
         badgeDrawable.isVisible();
         badgeDrawable.setNumber(5);*/
 
+    }
+
+    private void ShowAttendanceByDate() {
+        // making layout visible
+        viewByDateLayout = findViewById(R.id.viewByDateLayout);
+        viewByDateLayout.setVisibility(View.VISIBLE);
+
+        //initialize
+        attendanceRecycler = findViewById(R.id.attendanceRecyclerView);
+
+        // TODO data filling
+        DummyDataFill();
+
+        // setting up the recycler view
+        attendanceAdapter = new AttendanceAdapter(attendanceDetailsList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        attendanceRecycler.setLayoutManager(layoutManager);
+        attendanceRecycler.setAdapter(attendanceAdapter);
+    }
+
+    private void DummyDataFill() {
+        attendanceDetailsList = new ArrayList<>();
+        List<HourDetails> hourDetailsArrayList = new ArrayList<>();
+        hourDetailsArrayList.add(new HourDetails("1", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+        hourDetailsArrayList.add(new HourDetails("2", "Sumit Narendar", "Computer Graphics", "11:50:12", false));
+        hourDetailsArrayList.add(new HourDetails("3", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+        hourDetailsArrayList.add(new HourDetails("4", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+        hourDetailsArrayList.add(new HourDetails("5", "Sumit Narendar", "Computer Graphics", "11:50:12", false));
+        hourDetailsArrayList.add(new HourDetails("6", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+        hourDetailsArrayList.add(new HourDetails("7", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+
+        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
+        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
     }
 }

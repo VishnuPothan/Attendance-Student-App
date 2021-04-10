@@ -15,4 +15,6 @@
     <string name="profile">Profile</string>
     <string name="attendance_view">Attendance View</string>
     <string name="apply">Apply</string>
+    <string name="present">P</string>
+    <string name="date">Date</string>
 </resources>
