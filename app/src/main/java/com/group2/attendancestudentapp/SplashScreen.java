@@ -10,6 +10,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.group2.attendancestudentapp.SharedPreference.SharedPreference;
+
 import java.util.Objects;
 
 public class SplashScreen extends AppCompatActivity {
@@ -33,7 +35,13 @@ public class SplashScreen extends AppCompatActivity {
         welcomeText.setAnimation(fadeAnimation);
 
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashScreen.this, LoginActivity.class));
+            if (SharedPreference.getUserVerified(getApplicationContext())){
+                Intent mainIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(mainIntent);
+            }else {
+                Intent verifyIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                startActivity(verifyIntent);
+            }
             finish();
         }, 1500);
     }

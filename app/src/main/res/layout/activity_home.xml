@@ -42,182 +42,182 @@
         android:textSize="18sp"
         app:backgroundTint="@color/secondary" />
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/viewByDateLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/applyBtn">
+        android:layout_below="@+id/applyBtn"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true">
 
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="2dp"
-                android:checkable="true"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/primary">
+                android:layout_height="match_parent"
+                android:paddingHorizontal="3dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/dayBtn"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="55dp"
                     android:layout_height="match_parent"
-                    android:paddingHorizontal="3dp">
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/bold"
+                    android:padding="0dp"
+                    android:text="@string/date"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/dayBtn"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="55dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/bold"
-                        android:padding="0dp"
-                        android:text="@string/date"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour1"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_1"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour1"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="1"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour2"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_2"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour2"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="2"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour3"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_3"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour3"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="3"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour4"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_4"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour4"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="4"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour5"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_5"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour5"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="5"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour6"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_6"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
 
-                    <Button
-                        android:id="@+id/hour6"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="6"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
+                <Button
+                    android:id="@+id/hour7"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/light"
+                    android:padding="0dp"
+                    android:text="@string/_7"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/ivory" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                    <Button
-                        android:id="@+id/hour7"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/light"
-                        android:padding="0dp"
-                        android:text="7"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/ivory" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/attendanceRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:backgroundTint="@color/secondary"
+        app:backgroundTint="@color/ivory"
         app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

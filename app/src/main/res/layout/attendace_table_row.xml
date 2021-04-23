@@ -6,8 +6,7 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    android:layout_margin="2dp"
-    app:cardBackgroundColor="@color/black">
+    android:layout_margin="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +43,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -61,7 +60,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -78,7 +77,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -95,7 +94,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -112,7 +111,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -129,7 +128,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
 
@@ -146,7 +145,7 @@
             android:text="@string/present"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:backgroundTint="@color/ivory" />
     </LinearLayout>

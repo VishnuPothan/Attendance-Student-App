@@ -44,6 +44,14 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         holder.hour5Btn.setText(attendanceDetails.getHourDetailsList().get(4).getPresent() ? "P" : "A");
         holder.hour6Btn.setText(attendanceDetails.getHourDetailsList().get(5).getPresent() ? "P" : "A");
         holder.hour7Btn.setText(attendanceDetails.getHourDetailsList().get(6).getPresent() ? "P" : "A");
+
+        holder.hour1Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(0).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour2Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(1).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour3Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(2).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour4Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(3).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour5Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(4).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour6Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(5).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour7Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(6).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
     }
 
     @Override

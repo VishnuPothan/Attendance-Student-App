@@ -6,10 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     AutoCompleteTextView editTextFilledExposedDropdown;
-    ScrollView viewByDateLayout;
+    LinearLayout viewByDateLayout;
     RecyclerView attendanceRecycler;
     AttendanceAdapter attendanceAdapter;
     List<AttendanceDetails> attendanceDetailsList;
@@ -80,6 +84,16 @@ public class HomeActivity extends AppCompatActivity {
         // making layout visible
         viewByDateLayout = findViewById(R.id.viewByDateLayout);
         viewByDateLayout.setVisibility(View.VISIBLE);
+
+        viewByDateLayout.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollY = viewByDateLayout.getScrollY(); // For ScrollView
+                int scrollX = viewByDateLayout.getScrollX(); // For HorizontalScrollView
+                // DO SOMETHING WITH THE SCROLL COORDINATES
+                Log.d("ScrollView","scrollX_"+scrollX+"_scrollY_"+scrollY+"_oldScrollX_");
+            }
+        });
 
         //initialize
         attendanceRecycler = findViewById(R.id.attendanceRecyclerView);
