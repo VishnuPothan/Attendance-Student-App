@@ -12,7 +12,7 @@ public class SharedPreference {
     public static final String USER_VERIFIED = "userVerified";
     public static final String USER_NAME = "userName";
     public static final String USER_ID = "userID";
-    public static final String USER_PHONE = "userID";
+    public static final String USER_PHONE = "userPhone";
 
     //user details get
     public static Boolean getUserVerified(Context context) {

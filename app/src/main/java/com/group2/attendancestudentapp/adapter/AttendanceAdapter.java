@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group2.attendancestudentapp.R;
-import com.group2.attendancestudentapp.model.AttendanceDetails;
+import com.group2.attendancestudentapp.model.AttendanceDateModel;
 
 import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
-    List<AttendanceDetails> attendanceDetailsList;
+    List<AttendanceDateModel> attendanceDateModelLists;
     Context context;
 
-    public AttendanceAdapter(List<AttendanceDetails> attendanceDetailsList) {
-        this.attendanceDetailsList = attendanceDetailsList;
+    public AttendanceAdapter(List<AttendanceDateModel> attendanceDateModelLists) {
+        this.attendanceDateModelLists = attendanceDateModelLists;
     }
 
     @NonNull
@@ -32,31 +32,31 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AttendanceAdapter.ViewHolder holder, int position) {
-        final AttendanceDetails attendanceDetails = attendanceDetailsList.get(position);
+        final AttendanceDateModel attendanceDateModel = attendanceDateModelLists.get(position);
 
-        holder.dayBtn.setText(attendanceDetails.getDateStr());
+        holder.dayBtn.setText(attendanceDateModel.getDateStr());
 
         // table set
-        holder.hour1Btn.setText(attendanceDetails.getHourDetailsList().get(0).getPresent() ? "P" : "A");
-        holder.hour2Btn.setText(attendanceDetails.getHourDetailsList().get(1).getPresent() ? "P" : "A");
-        holder.hour3Btn.setText(attendanceDetails.getHourDetailsList().get(2).getPresent() ? "P" : "A");
-        holder.hour4Btn.setText(attendanceDetails.getHourDetailsList().get(3).getPresent() ? "P" : "A");
-        holder.hour5Btn.setText(attendanceDetails.getHourDetailsList().get(4).getPresent() ? "P" : "A");
-        holder.hour6Btn.setText(attendanceDetails.getHourDetailsList().get(5).getPresent() ? "P" : "A");
-        holder.hour7Btn.setText(attendanceDetails.getHourDetailsList().get(6).getPresent() ? "P" : "A");
+        holder.hour1Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(0).getAttendanceMark());
+        holder.hour2Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(1).getAttendanceMark());
+        holder.hour3Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(2).getAttendanceMark());
+        holder.hour4Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(3).getAttendanceMark());
+        holder.hour5Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(4).getAttendanceMark());
+        holder.hour6Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(5).getAttendanceMark());
+        holder.hour7Btn.setText(attendanceDateModel.getAttendanceSubjectModelList().get(6).getAttendanceMark());
 
-        holder.hour1Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(0).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour2Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(1).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour3Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(2).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour4Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(3).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour5Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(4).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour6Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(5).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
-        holder.hour7Btn.setBackgroundColor(!attendanceDetails.getHourDetailsList().get(6).getPresent() ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour1Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(0).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour2Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(1).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour3Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(2).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour4Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(3).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour5Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(4).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour6Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(5).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+        holder.hour7Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(6).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
     }
 
     @Override
     public int getItemCount() {
-        return attendanceDetailsList.size();
+        return attendanceDateModelLists.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

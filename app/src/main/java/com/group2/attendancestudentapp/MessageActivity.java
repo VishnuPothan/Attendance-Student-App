@@ -7,15 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.group2.attendancestudentapp.adapter.AttendanceAdapter;
 import com.group2.attendancestudentapp.adapter.MessageAdapter;
-import com.group2.attendancestudentapp.model.AttendanceDetails;
-import com.group2.attendancestudentapp.model.HourDetails;
 import com.group2.attendancestudentapp.model.MessageDetails;
 
 import java.util.ArrayList;

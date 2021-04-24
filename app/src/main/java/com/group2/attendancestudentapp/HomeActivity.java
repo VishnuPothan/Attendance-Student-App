@@ -1,28 +1,38 @@
 package com.group2.attendancestudentapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.group2.attendancestudentapp.SharedPreference.SharedPreference;
 import com.group2.attendancestudentapp.adapter.AttendanceAdapter;
-import com.group2.attendancestudentapp.model.AttendanceDetails;
-import com.group2.attendancestudentapp.model.HourDetails;
+import com.group2.attendancestudentapp.model.AttendanceDateModel;
+import com.group2.attendancestudentapp.model.AttendanceStudentModel;
+import com.group2.attendancestudentapp.model.AttendanceSubjectModel;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
@@ -32,13 +42,18 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout viewByDateLayout;
     RecyclerView attendanceRecycler;
     AttendanceAdapter attendanceAdapter;
-    List<AttendanceDetails> attendanceDetailsList;
+    List<AttendanceDateModel> attendanceDateModelList;
+    private DatabaseReference mDatabase;
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        //Initialize Firebase
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Bottom Navigation SetUp
         bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -69,15 +84,12 @@ public class HomeActivity extends AppCompatActivity {
         editTextFilledExposedDropdown = findViewById(R.id.attendanceViewText);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
-        // findViewById(R.id.applyBtn).setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), AttendanceTableViewActivity.class)));
-
         findViewById(R.id.applyBtn).setOnClickListener(view -> ShowAttendanceByDate());
 
         // TODO Badge code for icon
         /*BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.home);
         badgeDrawable.isVisible();
         badgeDrawable.setNumber(5);*/
-
     }
 
     private void ShowAttendanceByDate() {
@@ -85,63 +97,67 @@ public class HomeActivity extends AppCompatActivity {
         viewByDateLayout = findViewById(R.id.viewByDateLayout);
         viewByDateLayout.setVisibility(View.VISIBLE);
 
-        viewByDateLayout.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                int scrollY = viewByDateLayout.getScrollY(); // For ScrollView
-                int scrollX = viewByDateLayout.getScrollX(); // For HorizontalScrollView
-                // DO SOMETHING WITH THE SCROLL COORDINATES
-                Log.d("ScrollView","scrollX_"+scrollX+"_scrollY_"+scrollY+"_oldScrollX_");
-            }
-        });
-
         //initialize
         attendanceRecycler = findViewById(R.id.attendanceRecyclerView);
 
-        // TODO data filling
-        DummyDataFill();
+        GetAttendanceData();
 
-        // setting up the recycler view
-        attendanceAdapter = new AttendanceAdapter(attendanceDetailsList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        attendanceRecycler.setLayoutManager(layoutManager);
-        attendanceRecycler.setAdapter(attendanceAdapter);
     }
 
-    private void DummyDataFill() {
-        attendanceDetailsList = new ArrayList<>();
-        List<HourDetails> hourDetailsArrayList = new ArrayList<>();
-        hourDetailsArrayList.add(new HourDetails("1", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
-        hourDetailsArrayList.add(new HourDetails("2", "Sumit Narendar", "Computer Graphics", "11:50:12", false));
-        hourDetailsArrayList.add(new HourDetails("3", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
-        hourDetailsArrayList.add(new HourDetails("4", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
-        hourDetailsArrayList.add(new HourDetails("5", "Sumit Narendar", "Computer Graphics", "11:50:12", false));
-        hourDetailsArrayList.add(new HourDetails("6", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
-        hourDetailsArrayList.add(new HourDetails("7", "Sumit Narendar", "Computer Graphics", "11:50:12", true));
+    private void GetAttendanceData() {
+        attendanceDateModelList = new ArrayList<>();
 
-        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("20-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("21-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("22-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("23-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("24-30-2021", hourDetailsArrayList));
-        attendanceDetailsList.add(new AttendanceDetails("25-30-2021", hourDetailsArrayList));
+        mDatabase.child("attendance").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String dateStr = ds.getKey();
+
+                    HashMap<String, Objects> hMap = (HashMap<String, Objects>) snapshot.getValue();
+                    assert hMap != null;
+                    Object pair = hMap.get(dateStr);
+                    HashMap<String, Objects> subjectMap = (HashMap<String, Objects>) pair;
+
+                    List<AttendanceSubjectModel> attendanceSubjectModelList = new ArrayList<>();
+                    assert subjectMap != null;
+                    for (Map.Entry mapElement : subjectMap.entrySet()) {
+                        String uniqueKeyStr = (String) mapElement.getKey();
+
+                        Gson gson = new Gson();
+                        String json = gson.toJson(mapElement.getValue());
+
+                        Type collectionType = new TypeToken<List<AttendanceStudentModel>>() {
+                        }.getType();
+                        List<AttendanceStudentModel> attendanceStudentModelList = gson.fromJson(json, collectionType);
+
+                        // filter for this user
+                        AttendanceStudentModel attendanceStudentModelUser = new AttendanceStudentModel();
+                        for (int i = 0; i < attendanceStudentModelList.size(); i++) {
+                            if (attendanceStudentModelList.get(i).getID().equals(SharedPreference.getUserID(getApplicationContext()))) {
+                                Log.i("here json ", attendanceStudentModelList.get(i).getID());
+                                attendanceStudentModelUser = attendanceStudentModelList.get(i);
+                            }
+                        }
+                        AttendanceSubjectModel attendanceSubjectModel = new AttendanceSubjectModel(uniqueKeyStr, attendanceStudentModelUser.getID(), attendanceStudentModelUser.getName(), attendanceStudentModelUser.getSubject(), attendanceStudentModelUser.getTime(), attendanceStudentModelUser.getTeacherID(), attendanceStudentModelUser.getAttendanceMark());
+                        attendanceSubjectModelList.add(attendanceSubjectModel);
+                    }
+                    if (attendanceSubjectModelList.size() != 0) {
+                        AttendanceDateModel attendanceDateModel = new AttendanceDateModel(dateStr, attendanceSubjectModelList);
+                        attendanceDateModelList.add(attendanceDateModel);
+                    }
+                }
+
+                // setting up the recycler view
+                attendanceAdapter = new AttendanceAdapter(attendanceDateModelList);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                attendanceRecycler.setLayoutManager(layoutManager);
+                attendanceRecycler.setAdapter(attendanceAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("here Attendance", String.valueOf(error));
+            }
+        });
     }
 }

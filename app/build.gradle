@@ -41,5 +41,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //OTP PIN View Design
-    implementation 'com.chaos.view:pinview:1.4.3'
+    implementation 'com.chaos.view:pinview:1.4.4'
+
+    //Json parser
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
