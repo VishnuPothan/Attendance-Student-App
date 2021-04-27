@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -23,10 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.group2.attendancestudentapp.SharedPreference.SharedPreference;
-import com.group2.attendancestudentapp.adapter.AttendanceAdapter;
+import com.group2.attendancestudentapp.adapter.AttendanceViewDateAdapter;
+import com.group2.attendancestudentapp.adapter.AttendanceViewSubjectAdapter;
 import com.group2.attendancestudentapp.model.AttendanceDateModel;
 import com.group2.attendancestudentapp.model.AttendanceStudentModel;
 import com.group2.attendancestudentapp.model.AttendanceSubjectModel;
+import com.group2.attendancestudentapp.model.AttendanceSubjectViewModel;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,12 +44,16 @@ public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     AutoCompleteTextView editTextFilledExposedDropdown;
-    LinearLayout viewByDateLayout;
-    RecyclerView attendanceRecycler;
-    AttendanceAdapter attendanceAdapter;
+    LinearLayout viewByDateLayout, viewByPercentageLayout, viewBySubjectLayout;
+    RecyclerView attendanceRecycler, attendanceSubjectRecyclerView;
+    AttendanceViewDateAdapter attendanceViewDateAdapter;
+    AttendanceViewSubjectAdapter attendanceViewSubjectAdapter;
     List<AttendanceDateModel> attendanceDateModelList;
+    List<AttendanceSubjectViewModel> attendanceSubjectViewModelList;
     private DatabaseReference mDatabase;
-
+    TextView percentageText, totalHourText, attendedHoursText;
+    String selectedStr;
+    ProgressBar progressBar;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +93,21 @@ public class HomeActivity extends AppCompatActivity {
         editTextFilledExposedDropdown = findViewById(R.id.attendanceViewText);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
-        findViewById(R.id.applyBtn).setOnClickListener(view -> ShowAttendanceByDate());
+        findViewById(R.id.applyBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedStr = String.valueOf(editTextFilledExposedDropdown.getText());
+                if (selectedStr.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Select a option!!!", Toast.LENGTH_SHORT).show();
+                } else if (selectedStr.equals("By Percentage")) {
+                    ShowAttendanceByPercentage();
+                } else if (selectedStr.equals("By Date")) {
+                    ShowAttendanceByDate();
+                } else if (selectedStr.equals("By Subject")) {
+                    ShowAttendanceBySubject();
+                }
+            }
+        });
 
         // TODO Badge code for icon
         /*BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.home);
@@ -92,19 +115,67 @@ public class HomeActivity extends AppCompatActivity {
         badgeDrawable.setNumber(5);*/
     }
 
+    private void ShowAttendanceBySubject() {
+        // making layout visible
+        viewBySubjectLayout = findViewById(R.id.viewBySubjectLayout);
+        viewBySubjectLayout.setVisibility(View.VISIBLE);
+
+        // making layout invisible
+        viewByPercentageLayout = findViewById(R.id.viewByPercentageLayout);
+        viewByPercentageLayout.setVisibility(View.GONE);
+
+        viewByDateLayout = findViewById(R.id.viewByDateLayout);
+        viewByDateLayout.setVisibility(View.GONE);
+
+        // initialize
+        attendanceSubjectRecyclerView = findViewById(R.id.attendanceSubjectRecyclerView);
+
+        GetAttendanceData();
+    }
+
     private void ShowAttendanceByDate() {
         // making layout visible
         viewByDateLayout = findViewById(R.id.viewByDateLayout);
         viewByDateLayout.setVisibility(View.VISIBLE);
 
+        // making layout invisible
+        viewByPercentageLayout = findViewById(R.id.viewByPercentageLayout);
+        viewByPercentageLayout.setVisibility(View.GONE);
+
+        viewBySubjectLayout = findViewById(R.id.viewBySubjectLayout);
+        viewBySubjectLayout.setVisibility(View.GONE);
+
         //initialize
         attendanceRecycler = findViewById(R.id.attendanceRecyclerView);
 
         GetAttendanceData();
+    }
 
+    private void ShowAttendanceByPercentage() {
+        // making layout visible
+        viewByPercentageLayout = findViewById(R.id.viewByPercentageLayout);
+        viewByPercentageLayout.setVisibility(View.VISIBLE);
+
+        // making layout invisible
+        viewByDateLayout = findViewById(R.id.viewByDateLayout);
+        viewByDateLayout.setVisibility(View.GONE);
+
+        viewBySubjectLayout = findViewById(R.id.viewBySubjectLayout);
+        viewBySubjectLayout.setVisibility(View.GONE);
+
+        // initialize views
+        attendedHoursText = findViewById(R.id.attendedHoursText);
+        percentageText = findViewById(R.id.percentageText);
+        totalHourText = findViewById(R.id.totalHourText);
+
+        GetAttendanceData();
     }
 
     private void GetAttendanceData() {
+        // progressBar spin
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
         attendanceDateModelList = new ArrayList<>();
 
         mDatabase.child("attendance").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,7 +205,6 @@ public class HomeActivity extends AppCompatActivity {
                         AttendanceStudentModel attendanceStudentModelUser = new AttendanceStudentModel();
                         for (int i = 0; i < attendanceStudentModelList.size(); i++) {
                             if (attendanceStudentModelList.get(i).getID().equals(SharedPreference.getUserID(getApplicationContext()))) {
-                                Log.i("here json ", attendanceStudentModelList.get(i).getID());
                                 attendanceStudentModelUser = attendanceStudentModelList.get(i);
                             }
                         }
@@ -147,17 +217,102 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
 
-                // setting up the recycler view
-                attendanceAdapter = new AttendanceAdapter(attendanceDateModelList);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                attendanceRecycler.setLayoutManager(layoutManager);
-                attendanceRecycler.setAdapter(attendanceAdapter);
+                // rest of the view setup
+                if (selectedStr.equals("By Date")) {
+                    // setting up the view By Date
+                    attendanceViewDateAdapter = new AttendanceViewDateAdapter(attendanceDateModelList);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    attendanceRecycler.setLayoutManager(layoutManager);
+                    attendanceRecycler.setAdapter(attendanceViewDateAdapter);
+                } else if (selectedStr.equals("By Percentage")) {
+                    // setting up the view By Percentage
+                    int totalHour = 0;
+                    int attendedHour = 0;
+                    for (int i = 0; i < attendanceDateModelList.size(); i++) {
+                        for (int j = 0; j < attendanceDateModelList.get(i).getAttendanceSubjectModelList().size(); j++) {
+                            totalHour++;
+                            if (attendanceDateModelList.get(0).getAttendanceSubjectModelList().get(j).getAttendanceMark().equals("P")) {
+                                attendedHour++;
+                            }
+                        }
+                    }
+
+                    attendedHoursText.setText(String.valueOf(attendedHour));
+                    totalHourText.setText(String.valueOf(totalHour));
+                    double percentageDouble = ((double) attendedHour / totalHour) * 100;
+                    double percentageDoubleRound = (double) Math.round(percentageDouble * 100) / 100;
+                    percentageText.setText(String.valueOf(percentageDoubleRound));
+                } else if (selectedStr.equals("By Subject")) {
+                    // subject data listing
+                    List<String> subjectList = new ArrayList<>();
+                    attendanceSubjectViewModelList = new ArrayList<>();
+
+                    for (int i = 0; i < attendanceDateModelList.size(); i++) {
+                        AttendanceSubjectViewModel attendanceSubjectViewModel = new AttendanceSubjectViewModel();
+                        for (int j = 0; j < attendanceDateModelList.get(i).getAttendanceSubjectModelList().size(); j++) {
+                            AttendanceSubjectModel attendanceSubjectModel = attendanceDateModelList.get(i).getAttendanceSubjectModelList().get(j);
+                            if (!subjectList.contains(attendanceSubjectModel.getSubject())) {
+                                subjectList.add(attendanceSubjectModel.getSubject());
+                                if (attendanceSubjectModel.getAttendanceMark().equals("P")) {
+                                    attendanceSubjectViewModel = new AttendanceSubjectViewModel(attendanceSubjectModel.getSubject(), 1, 1, 100);
+                                } else if (attendanceSubjectModel.getAttendanceMark().equals("A") || attendanceSubjectModel.getAttendanceMark().equals("L")) {
+                                    attendanceSubjectViewModel = new AttendanceSubjectViewModel(attendanceSubjectModel.getSubject(), 0, 1, 0);
+                                }
+                                attendanceSubjectViewModelList.add(attendanceSubjectViewModel);
+                            } else {
+                                for (int k = 0; k < attendanceSubjectViewModelList.size(); k++) {
+                                    if(attendanceSubjectViewModelList.get(k).getSubjectName().equals(attendanceSubjectModel.getSubject())){
+                                        attendanceSubjectViewModel = attendanceSubjectViewModelList.get(k);
+                                        int attendedHour = attendanceSubjectViewModel.getAttendedHours();
+                                        int totalHour = attendanceSubjectViewModel.getTotalHour() + 1;
+                                        double percentage = attendanceSubjectViewModel.getPercentage();
+                                        if (attendanceSubjectModel.getAttendanceMark().equals("P")) {
+                                            attendedHour = attendedHour + 1;
+                                            percentage =  ((double) attendedHour / totalHour) * 100;
+                                            attendanceSubjectViewModelList.get(k).setAttendedHours(attendedHour);
+                                            attendanceSubjectViewModelList.get(k).setTotalHour(totalHour);
+                                            attendanceSubjectViewModelList.get(k).setPercentage(percentage);
+                                        } else if (attendanceSubjectModel.getAttendanceMark().equals("A") || attendanceSubjectModel.getAttendanceMark().equals("L")) {
+                                            percentage =  ((double) attendedHour / totalHour) * 100;
+                                            attendanceSubjectViewModelList.get(k).setAttendedHours(attendedHour);
+                                            attendanceSubjectViewModelList.get(k).setTotalHour(totalHour);
+                                            attendanceSubjectViewModelList.get(k).setPercentage(percentage);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // setting up the view By Subject
+                    attendanceViewSubjectAdapter = new AttendanceViewSubjectAdapter(attendanceSubjectViewModelList);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    attendanceSubjectRecyclerView.setLayoutManager(layoutManager);
+                    attendanceSubjectRecyclerView.setAdapter(attendanceViewSubjectAdapter);
+                }
+
+                // progressBar hide
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.i("here Attendance", String.valueOf(error));
+
+                // progressBar hide
+                progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    public void ShowAttendanceByDateDetails(int subjectPosition, int position) {
+        Gson gson = new Gson();
+        String hourDetailsStr = gson.toJson(attendanceDateModelList.get(position).getAttendanceSubjectModelList().get(subjectPosition));
+
+        Intent intent = new Intent(getBaseContext(), MessageSentActivity.class);
+        intent.putExtra("HOUR_DETAILS", hourDetailsStr);
+        intent.putExtra("DATE", attendanceDateModelList.get(position).getDateStr());
+        startActivity(intent);
     }
 }

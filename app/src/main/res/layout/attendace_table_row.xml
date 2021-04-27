@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:checkable="true"
-    android:clickable="true"
+    android:clickable="false"
     android:focusable="true"
     android:layout_margin="2dp">
 

@@ -9,29 +9,30 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.group2.attendancestudentapp.HomeActivity;
 import com.group2.attendancestudentapp.R;
 import com.group2.attendancestudentapp.model.AttendanceDateModel;
 
 import java.util.List;
 
-public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
+public class AttendanceViewDateAdapter extends RecyclerView.Adapter<AttendanceViewDateAdapter.ViewHolder> {
     List<AttendanceDateModel> attendanceDateModelLists;
     Context context;
 
-    public AttendanceAdapter(List<AttendanceDateModel> attendanceDateModelLists) {
+    public AttendanceViewDateAdapter(List<AttendanceDateModel> attendanceDateModelLists) {
         this.attendanceDateModelLists = attendanceDateModelLists;
     }
 
     @NonNull
     @Override
-    public AttendanceAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AttendanceViewDateAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.attendace_table_row, parent, false);
-        return new AttendanceAdapter.ViewHolder(view);
+        return new AttendanceViewDateAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AttendanceAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AttendanceViewDateAdapter.ViewHolder holder, int position) {
         final AttendanceDateModel attendanceDateModel = attendanceDateModelLists.get(position);
 
         holder.dayBtn.setText(attendanceDateModel.getDateStr());
@@ -52,6 +53,17 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         holder.hour5Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(4).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
         holder.hour6Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(5).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
         holder.hour7Btn.setBackgroundColor(!attendanceDateModel.getAttendanceSubjectModelList().get(6).getAttendanceMark().equals("P") ? context.getResources().getColor(R.color.red) : context.getResources().getColor(R.color.green));
+
+        //onClick of the button
+        HomeActivity homeActivity = (HomeActivity) context;
+        holder.hour1Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(0, position));
+        holder.hour2Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(1, position));
+        holder.hour3Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(2, position));
+        holder.hour4Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(3, position));
+        holder.hour5Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(4, position));
+        holder.hour6Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(5, position));
+        holder.hour7Btn.setOnClickListener(view -> homeActivity.ShowAttendanceByDateDetails(6, position));
+
     }
 
     @Override

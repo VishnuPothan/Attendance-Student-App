@@ -25,4 +25,17 @@
     <string name="_6">6</string>
     <string name="_7">7</string>
     <string name="requests">Requests</string>
+    <string name="attended_hours">Attended Hours</string>
+    <string name="total_hours">Total Hours</string>
+    <string name="attendance_percentage">Attendance Percentage</string>
+    <string name="subject_name">Subject Name</string>
+    <string name="attended_hour">Attended Hour</string>
+    <string name="total_hour">Total Hour</string>
+    <string name="percentage">Percentage</string>
+    <string name="sent_attendance_request">Sent Attendance Request</string>
+    <string name="time">Time</string>
+    <string name="attendance_mark">Attendance Mark</string>
+    <string name="enter_the_message">Enter the message</string>
+    <string name="teacher_name">Teacher Name</string>
+    <string name="submit">Submit</string>
 </resources>

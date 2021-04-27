@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceStudentApp">
+        <activity android:name=".MessageSentActivity"></activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MessageActivity" />
         <activity android:name=".HomeActivity" />
