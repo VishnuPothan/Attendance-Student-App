@@ -9,7 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.group2.attendancestudentapp.model.AttendanceSubjectModel;
+import com.group2.attendancestudentapp.model.RequestDetailsModel;
 import com.group2.attendancestudentapp.model.TeacherDetailsModel;
 
 import java.util.List;
@@ -31,6 +35,8 @@ public class MessageSentActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     Button submitBtn;
     ProgressBar progressBar;
+    AttendanceSubjectModel attendanceSubjectModel;
+    String hourDetailsStr, dateStr, messageStr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +56,11 @@ public class MessageSentActivity extends AppCompatActivity {
         //Initialize Firebase
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        String hourDetailsStr = getIntent().getStringExtra("HOUR_DETAILS");
-        String dateStr = getIntent().getStringExtra("DATE");
+        hourDetailsStr = getIntent().getStringExtra("HOUR_DETAILS");
+        dateStr = getIntent().getStringExtra("DATE");
 
         Gson gson = new Gson();
-        AttendanceSubjectModel attendanceSubjectModel = gson.fromJson(hourDetailsStr, AttendanceSubjectModel.class);
+        attendanceSubjectModel = gson.fromJson(hourDetailsStr, AttendanceSubjectModel.class);
 
         dateText.setText(dateStr);
         subjectNameText.setText(attendanceSubjectModel.getSubject());
@@ -65,12 +71,13 @@ public class MessageSentActivity extends AppCompatActivity {
             timeText.setText(attendanceSubjectModel.getTime());
         }
 
+        // load teacher data
         progressBar.setVisibility(View.VISIBLE);
         mDatabase.child("teacher").child(attendanceSubjectModel.getTeacherID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    TeacherDetailsModel teacherDetailsModel =  snapshot.getValue(TeacherDetailsModel.class);
+                if (snapshot.exists()) {
+                    TeacherDetailsModel teacherDetailsModel = snapshot.getValue(TeacherDetailsModel.class);
                     teacherNameText.setText(teacherDetailsModel.getName());
                     progressBar.setVisibility(View.GONE);
                 }
@@ -82,5 +89,23 @@ public class MessageSentActivity extends AppCompatActivity {
             }
         });
 
+        // on submit
+        submitBtn.setOnClickListener(view -> {
+            messageStr = String.valueOf(messageTextInput.getText());
+            if (messageStr.isEmpty()) {
+                messageTextInput.setError("Enter a message to continue");
+                return;
+            }
+            SentRequest();
+        });
+    }
+
+    private void SentRequest() {
+        RequestDetailsModel requestDetailsModel = new RequestDetailsModel(attendanceSubjectModel.getSubjectUniqueStr(), attendanceSubjectModel.getID(), attendanceSubjectModel.getTeacherID(), attendanceSubjectModel.getSubject(), attendanceSubjectModel.getTime(), dateStr, attendanceSubjectModel.getAttendanceMark(), String.valueOf(messageTextInput.getText()), "Pending");
+
+        mDatabase.child("request").child(attendanceSubjectModel.getSubjectUniqueStr() + attendanceSubjectModel.getID()).setValue(requestDetailsModel).addOnSuccessListener(aVoid -> {
+            Toast.makeText(getApplicationContext(), "Successfully Sent", Toast.LENGTH_SHORT).show();
+            finish();
+        }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Some error occurred, Try again!!!", Toast.LENGTH_SHORT).show());
     }
 }

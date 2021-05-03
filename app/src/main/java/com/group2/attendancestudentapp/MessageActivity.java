@@ -1,5 +1,6 @@
 package com.group2.attendancestudentapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,10 +8,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.group2.attendancestudentapp.SharedPreference.SharedPreference;
 import com.group2.attendancestudentapp.adapter.MessageAdapter;
-import com.group2.attendancestudentapp.model.MessageDetails;
+import com.group2.attendancestudentapp.model.RequestDetailsModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +30,17 @@ public class MessageActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     RecyclerView requestsRecyclerView;
     MessageAdapter messageAdapter;
-    List<MessageDetails> messageDetailsList;
+    private DatabaseReference mDatabase;
+    List<RequestDetailsModel> requestDetailsModelList;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        //Initialize Firebase
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Bottom Navigation SetUp
         bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -59,24 +72,37 @@ public class MessageActivity extends AppCompatActivity {
         //initialize
         requestsRecyclerView = findViewById(R.id.requestsRecyclerView);
 
-        // TODO data filling
-        DummyDataFill();
-
-        // setting up the recycler view
-        messageAdapter = new MessageAdapter(messageDetailsList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        requestsRecyclerView.setLayoutManager(layoutManager);
-        requestsRecyclerView.setAdapter(messageAdapter);
+        // data fetch
+        GetData();
     }
 
-    private void DummyDataFill() {
-        messageDetailsList = new ArrayList<>();
+    private void GetData() {
+        requestDetailsModelList = new ArrayList<>();
 
-        messageDetailsList.add(new MessageDetails("RE01", "20-03-2021", "Pending", "Sir I was present this hour but it is marked as not present.", "Programing Paradigms", "4", "TE02","ST04"));
+        mDatabase.child("request").orderByChild("studentID").equalTo(SharedPreference.getUserID(getApplicationContext())).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    RequestDetailsModel requestDetailsModel = ds.getValue(RequestDetailsModel.class);
+                    requestDetailsModelList.add(requestDetailsModel);
+                }
+                // setting up the recycler view
+                messageAdapter = new MessageAdapter(requestDetailsModelList);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                requestsRecyclerView.setLayoutManager(layoutManager);
+                requestsRecyclerView.setAdapter(messageAdapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        messageDetailsList.add(new MessageDetails("RE01", "20-03-2021", "Pending", "Sir I was present this hour but it is marked as not present.", "Programing Paradigms", "4", "TE02","ST04"));
+            }
+        });
+    }
 
-        messageDetailsList.add(new MessageDetails("RE01", "20-03-2021", "Pending", "Sir I was present this hour but it is marked as not present.", "Programing Paradigms", "4", "TE02","ST04"));
-
+    public void ShowRequestDetails(int position) {
+        Intent intent = new Intent(getApplicationContext(), MessageSentActivity.class);/*
+        intent.putExtra("HOUR_DETAILS", hourDetailsStr);
+        intent.putExtra("DATE", attendanceDateModelList.get(position).getDateStr());*/
+        startActivity(intent);
     }
 }

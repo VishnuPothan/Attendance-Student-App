@@ -111,10 +111,6 @@ public class OTPVerificationActivity extends AppCompatActivity {
                     String phoneStr = pairs[0].split("=")[1];
                     String nameStr = pairs[1].split("=")[1];
 
-                    Log.i("here : phone", phoneStr);
-                    Log.i("here : name", nameStr);
-                    Log.i("here : ID", userID);
-
                     SharedPreference.setUserID(getApplicationContext(), userID);
                     SharedPreference.setUserVerified(getApplicationContext(), true);
                     SharedPreference.setUserName(getApplicationContext(), nameStr);
