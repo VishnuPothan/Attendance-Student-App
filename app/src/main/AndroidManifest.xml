@@ -4,12 +4,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_calendar"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_calendar"
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceStudentApp">
-        <activity android:name=".MessageSentActivity"></activity>
+        <activity android:name=".ProfileEdit"></activity>
+        <activity android:name=".MessageSentActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MessageActivity" />
         <activity android:name=".HomeActivity" />

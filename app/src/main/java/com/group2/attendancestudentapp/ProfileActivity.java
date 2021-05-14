@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.group2.attendancestudentapp.SharedPreference.SharedPreference;
 
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+    TextView userNameText, roleText;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +45,12 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
             return false;
         });
+
+        // initialize
+        userNameText = findViewById(R.id.userNameText);
+        roleText = findViewById(R.id.roleText);
+
+        userNameText.setText(SharedPreference.getUserName(getApplicationContext()));
+        roleText.setText(SharedPreference.getUserID(getApplicationContext()));
     }
 }

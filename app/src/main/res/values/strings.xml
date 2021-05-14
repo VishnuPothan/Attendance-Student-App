@@ -38,4 +38,8 @@
     <string name="enter_the_message">Enter the message</string>
     <string name="teacher_name">Teacher Name</string>
     <string name="submit">Submit</string>
+    <string name="editPersonalInfo">Edit Profile Information</string>
+    <string name="phone">Phone</string>
+    <string name="save">save</string>
+    <string name="name">Name</string>
 </resources>

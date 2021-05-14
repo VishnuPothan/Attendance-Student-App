@@ -39,7 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.dateText.setText(requestDetailsModel.getDate());
         holder.subjectText.setText(requestDetailsModel.getSubject());
         holder.statusText.setText(requestDetailsModel.getStatus());
-        holder.cardRequest.setCardBackgroundColor(requestDetailsModel.getStatus().equals("Pending") ? context.getResources().getColor(R.color.primary) : context.getResources().getColor(R.color.secondary));
+        holder.cardRequest.setCardBackgroundColor(requestDetailsModel.getStatus().equals("Pending") ? context.getResources().getColor(R.color.Gray) : context.getResources().getColor(R.color.ivory));
 
         //onClick of the card
         MessageActivity homeActivity = (MessageActivity) context;

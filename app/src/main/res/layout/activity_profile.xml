@@ -31,10 +31,11 @@
 
                 <ImageView
                     android:id="@+id/profilePic"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
                     android:layout_marginHorizontal="20dp"
-                    android:src="@drawable/ic_launcher_background" />
+                    android:src="@drawable/icon_user" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,7 +48,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/bold"
-                        android:text="User Name"
                         android:textColor="@color/black"
                         android:textSize="24sp" />
 

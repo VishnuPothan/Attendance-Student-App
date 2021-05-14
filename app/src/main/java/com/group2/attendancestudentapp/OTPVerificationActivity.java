@@ -99,7 +99,7 @@ public class OTPVerificationActivity extends AppCompatActivity {
 
     private void checkExistingUser() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("student");
-        mDatabase.orderByChild("phone").equalTo(phoneNumberStr).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("phone").equalTo(phoneNumberStr.substring(3,13)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
